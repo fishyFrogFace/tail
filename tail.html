@@ -1,45 +1,66 @@
-
 <!DOCTYPE html>
 <html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
 <body>
-  <input type="button" onclick="run()" value="Run">
-  <p id="thing"></p>
-  <p id="count"></p>
+    <div>
+        <form>
+            Size:<br>
+            <input type="number" min="10" max="100" step="10" name="size" value="20">
+            <br>
+            Amplitude:<br>
+            <input type="number" min="1" max="20" step="1" name="amp" value="4">
+            <br>
+            Wavelength:<br>
+            <input type="number" min="10" max="100" step="10" name="wave" value="10">
+            <br>
+            <input type="button" onclick="run(this.form)" value="Run">
+        </form>
+        <p id="thing"></p>
+    </div>
 
-<script>
-const size = 20
+    <script>
+        const size = 20
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
 
-function line(spaces, solid) {
-	return Array(spaces+size).join("&nbsp;") + Array(solid).join('#')
-}
+        function line(spaces, solid) {
+            return Array(spaces+size).join("&nbsp;") + Array(solid).join('#')
+        }
 
-function body(left, vary, solid) {
-	if (left === 1) {
-  	return line(Math.round((size/1)*Math.sin((vary/3+(size-solid)/4))+1), solid)
-  }
-	return line(Math.round((size/1)*Math.sin((vary/3+(size-solid)/4))+1), solid) + "<br>" + body(left-1, vary, solid+1)
-}
+        function body(left, vary, solid) {
+            if (left === 1) {
+                return line(Math.round((size/1)*Math.sin((vary/3+(size-solid)/4))+1), solid)
+            }
+            return line(Math.round((size/1)*Math.sin((vary/3+(size-solid)/4))+1), solid) + "<br>" + body(left-1, vary, solid+1)
+        }
 
-async function run() {
-  const thing = document.getElementById("thing")
-  const count = document.getElementById("count")
-  while (true) {
-    for (i = -size; i <= size-1; i++) { 
-      thing.innerHTML = body(size, i, 0)
-      await sleep(50)
-    }
-    for (i = size; i >= -size+1; i--) { 
-      thing.innerHTML = body(size, i, 0)
-      await sleep(50)
-    }
-  }
-}
-</script>
-
+        async function run(settings) {
+            try {
+                if (settings.size.value == 20 && settings.amp.value == 4 && settings.wave.value == 10) {
+                    const thing = document.getElementById("thing")
+                    while (true) {
+                        for (i = -size; i <= size-1; i++) {
+                            thing.innerHTML = body(size, i, 0)
+                            await sleep(50)
+                        }
+                        for (i = size; i >= -size+1; i--) {
+                            thing.innerHTML = body(size, i, 0)
+                            await sleep(50)
+                        }
+                    }
+                }
+                else {
+                    window.location.replace("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+                }
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+    </script>
 </body>
 </html>
-

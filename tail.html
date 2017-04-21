@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+  <input type="button" onclick="run()" value="Run">
+  <p id="thing"></p>
+  <p id="count"></p>
+
+<script>
+const size = 20
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function line(spaces, solid) {
+	return Array(spaces+size).join("&nbsp;") + Array(solid).join('#')
+}
+
+function body(left, vary, solid) {
+	if (left === 1) {
+  	return line(Math.round((size/1)*Math.sin((vary/3+(size-solid)/4))+1), solid)
+  }
+	return line(Math.round((size/1)*Math.sin((vary/3+(size-solid)/4))+1), solid) + "<br>" + body(left-1, vary, solid+1)
+}
+
+async function run() {
+  const thing = document.getElementById("thing")
+  const count = document.getElementById("count")
+  while (true) {
+    for (i = -size; i <= size-1; i++) { 
+      thing.innerHTML = body(size, i, 0)
+      await sleep(50)
+    }
+    for (i = size; i >= -size+1; i--) { 
+      thing.innerHTML = body(size, i, 0)
+      await sleep(50)
+    }
+  }
+}
+</script>
+
+</body>
+</html>
+
